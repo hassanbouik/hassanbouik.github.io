@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hassan Bouik — Cybersecurity Student</title>
+<style>
+  :root {
+    --bg: #0b0e0f;
+    --bg-panel: #11161a;
+    --line: #1f2a2e;
+    --text: #c9d1d3;
+    --text-dim: #6b7c80;
+    --accent: #39ff88;
+    --accent-dim: #1f6b3f;
+    --mono: 'JetBrains Mono', 'Fira Code', monospace;
+    --serif: 'Space Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    line-height: 1.6;
+    font-size: 16px;
+  }
+
+  /* Scanline overlay */
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,0.015) 0px,
+      rgba(255,255,255,0.015) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  .wrap {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    background: rgba(11,14,15,0.92);
+    border-bottom: 1px solid var(--line);
+    backdrop-filter: blur(6px);
+    z-index: 10;
+  }
+  nav .wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 56px;
+  }
+  .logo {
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .logo::after {
+    content: "_";
+    animation: blink 1.2s step-end infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  nav ul {
+    display: flex;
+    gap: 24px;
+    list-style: none;
+  }
+  nav a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.15s;
+  }
+  nav a:hover { color: var(--accent); }
+
+  /* HERO */
+  header.hero {
+    padding: 100px 0 70px;
+    border-bottom: 1px solid var(--line);
+  }
+  .prompt-line {
+    color: var(--text-dim);
+    font-size: 14px;
+    margin-bottom: 18px;
+  }
+  .prompt-line .user { color: var(--accent); }
+  h1 {
+    font-size: 42px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: #f2f5f5;
+  }
+  h1 .accent { color: var(--accent); }
+  .tagline {
+    margin-top: 14px;
+    color: var(--text-dim);
+    font-size: 17px;
+    max-width: 540px;
+  }
+  .status-row {
+    display: flex;
+    gap: 22px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+  .status {
+    font-size: 13px;
+    color: var(--text-dim);
+    border: 1px solid var(--line);
+    padding: 6px 12px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+  }
+
+  /* SECTIONS */
+  section {
+    padding: 64px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  section:last-of-type { border-bottom: none; }
+
+  .section-label {
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-size: 26px;
+    color: #f2f5f5;
+    margin-bottom: 28px;
+    font-weight: 700;
+  }
+
+  p.body-text {
+    color: var(--text-dim);
+    max-width: 620px;
+  }
+  p.body-text + p.body-text { margin-top: 14px; }
+
+  /* SKILLS GRID */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin-top: 24px;
+  }
+  .skill-card {
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 16px;
+  }
+  .skill-card .cat {
+    color: var(--accent);
+    font-size: 13px;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+  .skill-card ul {
+    list-style: none;
+    color: var(--text-dim);
+    font-size: 14px;
+  }
+  .skill-card li { padding: 2px 0; }
+  .skill-card li::before {
+    content: "> ";
+    color: var(--accent-dim);
+  }
+
+  /* PROJECTS */
+  .project-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .project {
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 20px 22px;
+    transition: border-color 0.15s, transform 0.15s;
+  }
+  .project:hover {
+    border-color: var(--accent-dim);
+    transform: translateX(4px);
+  }
+  .project-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .project-head h3 {
+    color: #f2f5f5;
+    font-size: 17px;
+  }
+  .project-tag {
+    font-size: 12px;
+    color: var(--accent);
+    border: 1px solid var(--accent-dim);
+    padding: 2px 8px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .project p {
+    color: var(--text-dim);
+    font-size: 14px;
+    margin-top: 8px;
+  }
+  .project a {
+    color: var(--accent);
+    font-size: 13px;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 10px;
+  }
+  .project a:hover { text-decoration: underline; }
+
+  /* WRITEUPS PLACEHOLDER */
+  .placeholder-box {
+    border: 1px dashed var(--line);
+    border-radius: 4px;
+    padding: 24px;
+    margin-top: 24px;
+    color: var(--text-dim);
+    font-size: 14px;
+  }
+  .placeholder-box .room {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .placeholder-box .room:last-child { border-bottom: none; }
+  .placeholder-box .room .status-tag {
+    color: var(--text-dim);
+    font-size: 12px;
+  }
+
+  /* PROGRESS */
+  .progress-item {
+    margin-top: 18px;
+  }
+  .progress-item .label-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+  .progress-item .label-row span:last-child { color: var(--accent); }
+  .bar {
+    height: 6px;
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+  }
+
+  /* CONTACT */
+  .contact-grid {
+    display: flex;
+    gap: 14px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
+  .contact-link {
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 14px 22px;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 14px;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .contact-link:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  footer {
+    text-align: center;
+    padding: 32px 0;
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+  footer .accent { color: var(--accent); }
+
+  @media (max-width: 600px) {
+    h1 { font-size: 30px; }
+    nav ul { gap: 14px; }
+    nav a { font-size: 12px; }
+    header.hero { padding: 70px 0 50px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="logo">hbouik@portfolio:~$</div>
+    <ul>
+      <li><a href="#about">about</a></li>
+      <li><a href="#skills">skills</a></li>
+      <li><a href="#projects">projects</a></li>
+      <li><a href="#writeups">writeups</a></li>
+      <li><a href="#contact">contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="prompt-line"><span class="user">guest@web</span>:~$ whoami</div>
+    <h1>Hassan Bouik<br><span class="accent">// Aspiring Security Analyst</span></h1>
+    <p class="tagline">
+      Cybersecurity student based in Morocco, building hands-on skills in offensive security,
+      networking, and Linux. Currently working toward CompTIA Security+.
+    </p>
+    <div class="status-row">
+      <div class="status"><span class="dot"></span> Status: Learning &amp; Building</div>
+      <div class="status">Location: Morocco (UTC+1)</div>
+      <div class="status">Focus: Pentesting / Blue Team Basics</div>
+    </div>
+  </div>
+</header>
+
+<section id="about">
+  <div class="wrap">
+    <div class="section-label">01 / about</div>
+    <h2 class="section-title">About Me</h2>
+    <p class="body-text">
+      I'm a cybersecurity student passionate about understanding how systems break — and how to defend them.
+      I spend my time working through TryHackMe and HackTheBox labs, learning Linux fundamentals,
+      networking concepts, and the basics of web application security.
+    </p>
+    <p class="body-text">
+      My goal is to build a strong foundation through certifications like CompTIA Security+, develop practical
+      skills through CTFs and bug bounty practice, and eventually work toward a remote entry-level role in
+      cybersecurity.
+    </p>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="section-label">02 / skills</div>
+    <h2 class="section-title">Skills &amp; Tools</h2>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="cat">Networking</div>
+        <ul>
+          <li>TCP/IP fundamentals</li>
+          <li>DNS, HTTP, ports & protocols</li>
+          <li>Wireshark basics</li>
+        </ul>
+      </div>
+      <div class="skill-card">
+        <div class="cat">Systems</div>
+        <ul>
+          <li>Linux command line</li>
+          <li>Bash scripting basics</li>
+          <li>Windows fundamentals</li>
+        </ul>
+      </div>
+      <div class="skill-card">
+        <div class="cat">Security Tools</div>
+        <ul>
+          <li>Nmap</li>
+          <li>Burp Suite</li>
+          <li>Metasploit (basics)</li>
+        </ul>
+      </div>
+      <div class="skill-card">
+        <div class="cat">Learning Platforms</div>
+        <ul>
+          <li>TryHackMe</li>
+          <li>HackTheBox</li>
+          <li>OverTheWire</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="section-label">03 / projects</div>
+    <h2 class="section-title">Projects</h2>
+    <div class="project-list">
+
+      <div class="project">
+        <div class="project-head">
+          <h3>SafeGuard SOS</h3>
+          <span class="project-tag">App Concept</span>
+        </div>
+        <p>
+          An interactive safety app prototype that lets users quickly send SOS alerts with location data
+          to trusted contacts. Built as a UI/UX prototype to explore emergency response design.
+        </p>
+        <a href="#">View on GitHub →</a>
+      </div>
+
+      <div class="project">
+        <div class="project-head">
+          <h3>Network Scanner Script</h3>
+          <span class="project-tag">Python</span>
+        </div>
+        <p>
+          A simple Python script using socket and threading to scan a local network range for open ports
+          — built to understand how tools like Nmap work under the hood.
+        </p>
+        <a href="#">View on GitHub →</a>
+      </div>
+
+      <div class="project">
+        <div class="project-head">
+          <h3>VAULTEX</h3>
+          <span class="project-tag">Web</span>
+        </div>
+        <p>
+          A concept website for a cybersecurity services brand, designed and built to practice front-end
+          development and branding for the security industry.
+        </p>
+        <a href="#">View Live →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="writeups">
+  <div class="wrap">
+    <div class="section-label">04 / writeups</div>
+    <h2 class="section-title">Lab Write-ups</h2>
+    <p class="body-text">
+      Walkthroughs of rooms and boxes I've completed on TryHackMe and HackTheBox. Updated as I progress.
+    </p>
+    <div class="placeholder-box">
+      <div class="room"><span>TryHackMe — [Room name]</span><span class="status-tag">coming soon</span></div>
+      <div class="room"><span>TryHackMe — [Room name]</span><span class="status-tag">coming soon</span></div>
+      <div class="room"><span>HackTheBox — [Machine name]</span><span class="status-tag">coming soon</span></div>
+    </div>
+
+    <div class="progress-item">
+      <div class="label-row"><span>CompTIA Security+ Prep</span><span>In Progress</span></div>
+      <div class="bar"><div class="bar-fill" style="width: 30%;"></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="section-label">05 / contact</div>
+    <h2 class="section-title">Get In Touch</h2>
+    <p class="body-text">Open to learning opportunities, collaborations, and connecting with others in security.</p>
+    <div class="contact-grid">
+      <a class="contact-link" href="mailto:youremail@example.com">📧 Email</a>
+      <a class="contact-link" href="https://github.com/hassanbouik" target="_blank">🐙 GitHub</a>
+      <a class="contact-link" href="#" target="_blank">🔗 LinkedIn</a>
+      <a class="contact-link" href="#" target="_blank">🎯 TryHackMe</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    built with <span class="accent">bash, coffee, and persistence</span> — © 2026 Hassan Bouik
+  </div>
+</footer>
+
+</body>
+</html>
